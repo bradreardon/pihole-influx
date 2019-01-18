@@ -9,15 +9,15 @@ import traceback
 from datetime import datetime
 import sys
 
-HOSTNAME = os.env['PIHOLE_HOSTNAME']
-PIHOLE_API = HOSTNAME = os.env['PIHOLE_API']
-DELAY = int(os.env.get('REPORTING_INTERVAL', 10))
+HOSTNAME = os.environ['PIHOLE_HOSTNAME']
+PIHOLE_API = os.environ['PIHOLE_API']
+DELAY = int(os.environ.get('REPORTING_INTERVAL', 10))
 
-INFLUXDB_SERVER = os.env['INFLUX_HOST']
-INFLUXDB_PORT = int(os.env.get('INFLUX_PORT', 8086))
-INFLUXDB_USERNAME = os.env.get('INFLUX_USER', '')
-INFLUXDB_PASSWORD = os.env.get('INFLUX_PASSWORD', '')
-INFLUXDB_DATABASE = os.env['INFLUX_DB']
+INFLUXDB_SERVER = os.environ['INFLUX_HOST']
+INFLUXDB_PORT = int(os.environ.get('INFLUX_PORT', 8086))
+INFLUXDB_USERNAME = os.environ.get('INFLUX_USER', '')
+INFLUXDB_PASSWORD = os.environ.get('INFLUX_PASSWORD', '')
+INFLUXDB_DATABASE = os.environ['INFLUX_DB']
 
 INFLUXDB_CLIENT = InfluxDBClient(INFLUXDB_SERVER,
                                  INFLUXDB_PORT,
@@ -25,7 +25,7 @@ INFLUXDB_CLIENT = InfluxDBClient(INFLUXDB_SERVER,
                                  INFLUXDB_PASSWORD,
                                  INFLUXDB_DATABASE)
 
-logger = logging.get_logger()
+logger = logging.getLogger()
 logger.info("pihole-influx started")
 
 def send_msg(resp):
