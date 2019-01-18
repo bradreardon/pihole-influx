@@ -10,7 +10,7 @@ This container is configured by a series of environment variables.
 
 |Environment variable|Description|
 |---|---|
-|`PIHOLE_HOSTNAME`|The Pihole's hostname.|
+|`PIHOLE_HOSTNAME`|The Pihole's hostname. Used for the `hostname` tag in InfluxDB reports.|
 |`PIHOLE_API`|The API URL of the Pihole on the network.|
 |`REPORTING_INTERVAL`|Reporting interval of script. Defaults to every 10 seconds.|
 |`INFLUX_HOST`|Host of the InfluxDB server.|
