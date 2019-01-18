@@ -1,6 +1,5 @@
 #! /usr/bin/python
 
-from __future__ import print_function
 import requests
 import logging
 from time import sleep, localtime, strftime
@@ -27,7 +26,7 @@ INFLUXDB_CLIENT = InfluxDBClient(INFLUXDB_SERVER,
                                  INFLUXDB_DATABASE)
 
 logger = logging.get_logger()
-logger.info("pihole-influx ready")
+logger.info("pihole-influx started")
 
 def send_msg(resp):
     if 'gravity_last_updated' in resp:
@@ -37,7 +36,7 @@ def send_msg(resp):
         {
             "measurement": "pihole",
             "tags": {
-                "host": HOSTNAME
+                "hostname": HOSTNAME
             },
             "fields": resp
         }
@@ -56,7 +55,6 @@ if __name__ == '__main__':
 
         except Exception as e:
             logger.error('Failed to report to InfluxDB: {}'.format(str(e)))
-            print(msg, str(e))
             print(traceback.format_exc())
             sys.exit(1)
 
