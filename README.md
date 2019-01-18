@@ -1,63 +1,23 @@
-# Pi-hole-Influx
+# pihole-influx
 
 A simple daemonized script to report Pi-Hole stats to an InfluxDB, ready to be displayed via Grafana.
 
 ![Example Grafana Dashboard](.readme-assets/dashboard.png)
 
-## Requirements and Setup
+## Configuration
 
-As Pi-hole (as the name suggests) is built specifically with the Raspberry Pi in mind (and I run it on there as well), the following steps assume an instance of Pi-hole on Raspbian Strech Lite, with no additional modifications so far. Piholestatus will be configured to run on the same Pi. 
+This container is configured by a series of environment variables.
 
-First install the necessary packages via apt as Raspbian Lite does have neither git nor pip installed.
-
-```bash
-sudo apt update
-sudo apt install git python-pip -y
-```
-
-Now clone the repo, install the Python dependencies, and make sure to copy and adjust the example configuation file to match your setup.
-
-```bash
-git clone https://github.com/janw/pi-hole-influx.git ~/pi-hole-influx
-cd ~/pi-hole-influx
-
-# Install requirements via pip
-pip install -r requirements.txt
-
-# Copy config.example and modify it (should be self-explanatory)
-cp config.ini.example config.ini
-vi config.ini
-```
-
-Before starting the daemon for the first time, symlink the systemd service into place, reload, and enable the service.
-
-```bash
-sudo ln -s /home/pi/pi-hole-influx/piholeinflux.service /etc/systemd/system/
-sudo systemctl --system daemon-reload
-sudo systemctl enable piholeinflux.service
-```
-
-Now you're ready to start the daemon. Wait a few seconds to check its status.
-
-```bash
-sudo systemctl start piholeinflux.service
-sudo systemctl status piholeinflux.service
-```
-
-The status should look as follows. Note the `Status:` line showing the last time, the daemon reported to InfluxDB:
-
-```
-● piholeinflux.service - Pi-hole-Influx - Send Pi-hole statistics to InfluxDB for visualization
-   Loaded: loaded (/home/pi/pi-hole-influx/piholeinflux.service; enabled; vendor preset: enabled)
-   Active: active (running) since Fri 2018-06-22 19:03:56 UTC; 10min ago
-     Docs: https://github.com/janw/pi-hole-influx
- Main PID: 21329 (python)
-   Status: "Reported to InfluxDB at 2018-06-22 19:14:09 +0000"
-   CGroup: /system.slice/piholeinflux.service
-           └─21329 /usr/bin/python /home/pi/pi-hole-influx/piholeinflux.py
-```
-
-
+|Environment variable|Description|
+|---|---|
+|`PIHOLE_HOSTNAME`|The Pihole's hostname.|
+|`PIHOLE_API`|The API URL of the Pihole on the network.|
+|`REPORTING_INTERVAL`|Reporting interval of script. Defaults to every 10 seconds.|
+|`INFLUX_HOST`|Host of the InfluxDB server.|
+|`INFLUX_PORT`|InfluxDB port. Defaults to `8086`.|
+|`INFLUX_USER`|The username for the InfluxDB user|
+|`INFLUX_PASSWORD`|The password for the InfluxDB user|
+|`INFLUX_DB`|The database name in InfluxDB|
 
 ## Set up a Grafana Dashboard 
 
@@ -66,4 +26,7 @@ The example dashboard seen [at the top](#pi-hole-influx) uses the collected data
 
 ## Attributions
 
-The script originally [created by Jon Hayward](https://fattylewis.com/Graphing-pi-hole-stats/), adapted to work with InfluxDB [by /u/tollsjo in December 2016](https://github.com/sco01/piholestatus), and [improved and extended by @johnappletree](https://github.com/johnappletree/piholestatus). "If I have seen further it is by standing on the shoulders of giants". 🤓
+Quoted from the README of the forked repo `janw/pi-hole-influx`:
+> The script originally [created by Jon Hayward](https://fattylewis.com/Graphing-pi-hole-stats/), adapted to work with InfluxDB [by /u/tollsjo in December 2016](https://github.com/sco01/piholestatus), and [improved and extended by @johnappletree](https://github.com/johnappletree/piholestatus). "If I have seen further it is by standing on the shoulders of giants". 🤓
+
+Further modified by [Brad Reardon](https://github.com/bradreardon) to work with Docker.
